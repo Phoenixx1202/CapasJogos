@@ -18,7 +18,6 @@ GITHUB_REPO = 'Phoenixx1202/CapasJogos'
 LATEST_RELEASE_URL = f'https://api.github.com/repos/{GITHUB_REPO}/releases/latest'
 
 plataformas = [
-    (13, 'PSP'),
     (25, '3DO'),
     (22, 'Atari 2600'),
     (26, 'Atari 5200'),
@@ -54,6 +53,7 @@ plataformas = [
     (4958, 'Sega Pico'),
     (17, 'Sega Saturn'),
     (4949, 'SEGA SG-1000'),
+    (13, 'PSP'),
     (10, 'Sony Playstation'),
     (11, 'Sony Playstation 2'),
     (4925, 'WonderSwan'),

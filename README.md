@@ -1,5 +1,4 @@
-# CapasJogos
-Baixar Capas de Jogos
+# Programa para baixar capa de jogos
 
 Pasta Entrada: Informar a Pasta onde estão os arquivos de Jogos.
 

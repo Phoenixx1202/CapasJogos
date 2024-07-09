@@ -166,9 +166,6 @@ Lista de ID e Nomes de plataformas caso queiram criar um .exe com mais opções.
     ID: 5019	NOME: "Jupiter Ace"
     ID: 5020	NOME: "Sinclair QL"
 
-![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/7224487e-5ce6-4521-8392-bb00b35bf336)
-
-
 
 Necessário :
 pip install requests

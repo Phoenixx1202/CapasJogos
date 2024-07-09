@@ -167,13 +167,13 @@ Lista de ID e Nomes de plataformas caso queiram criar um .exe com mais opções.
     ID: 5020	NOME: "Sinclair QL"
 
 
-Necessário :
-pip install requests
-pip install pyinstaller
-
-
-Criar um .exe:
-pyinstaller --onefile --windowed baixarcapas.py
+    Necessário :
+    pip install requests
+    pip install pyinstaller
+    
+    
+    Criar um .exe:
+    pyinstaller --onefile --windowed baixarcapas.py
 
 
 

@@ -6,7 +6,8 @@ Pasta Saída: Informar a pasta onde sera salva as img.
 
 Plataforma: informar o código da plataforma.
 
-![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/b4214fbd-4447-4efb-bbca-c9020ee8eb16)
+![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/f0872b60-aefd-4987-a170-242dadd3a05d)
+
 
 
 

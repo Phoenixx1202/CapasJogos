@@ -2,7 +2,8 @@
 Baixar Capas de Jogos
 
 
-![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/3d43e8b5-db1b-476e-8095-ac9c5e5f87e1)
+![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/c9e0c9d0-a22a-4047-adee-38c14a73803b)
+
 
 
 Pasta Entrada: Informar a Pasta onde estão os arquivos de Jogos.

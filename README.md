@@ -1,6 +1,10 @@
 # CapasJogos
 Baixar Capas de Jogos
 
+
+![image](https://github.com/Phoenixx1202/CapasJogos/assets/26288409/3d43e8b5-db1b-476e-8095-ac9c5e5f87e1)
+
+
 Pasta Entrada: Informar a Pasta onde estão os arquivos de Jogos.
 
 Pasta Saída: Informar a pasta onde sera salva as img.

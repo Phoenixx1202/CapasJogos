@@ -79,7 +79,7 @@ def check_for_updates():
 
 # Função para obter a versão atual do programa
 def get_current_version():
-    return "v1.2"
+    return "v1.3"
 
 # Função para atualizar o programa
 def update_program(download_url):
@@ -148,11 +148,10 @@ def get_game_names_from_folder(folder_path):
             continue
         name_without_extension, _ = os.path.splitext(file_name)
         main_game_name = extract_main_game_name(name_without_extension)
-        game_names.append((main_game_name, name_without_extension))
+        game_names.append((main_game_name, name_without_extension))  # Armazena o nome filtrado e o nome original sem extensão
     return game_names
 
-# Função para baixar a capa do jogo e salvar na pasta de saída com o nome original do arquivo e a extensão .jpg
-def download_game_cover(game_name, platform_id, output_folder, progress_var, original_file_name):
+def download_game_cover(game_name, platform_id, output_folder, progress_var, original_file_name, save_as_png=False, save_as_jpg=False):
     game_info = get_game_info(game_name, platform_id)
     if game_info and 'data' in game_info and 'games' in game_info['data'] and game_info['data']['games']:
         game = next((g for g in game_info['data']['games'] if g['platform'] == platform_id), None)
@@ -170,7 +169,13 @@ def download_game_cover(game_name, platform_id, output_folder, progress_var, ori
 
                             response = requests.get(url)
                             if response.status_code == 200:
-                                image_path = os.path.join(output_folder, f"{original_file_name}.jpg")
+                                if save_as_png:
+                                    image_path = os.path.join(output_folder, f"{original_file_name}.png")
+                                elif save_as_jpg:
+                                    image_path = os.path.join(output_folder, f"{original_file_name}.jpg")
+                                else:
+                                    image_path = os.path.join(output_folder, f"{original_file_name}.jpg")  # Default to JPG if neither PNG nor JPG selected
+
                                 with open(image_path, 'wb') as f:
                                     f.write(response.content)
                                 print(f'Capa do jogo "{game_name}" baixada e salva em: {image_path}')
@@ -189,21 +194,27 @@ def download_game_cover(game_name, platform_id, output_folder, progress_var, ori
     progress_var.set(progress_var.get() + 1)
 
 # Função para iniciar o download das capas
-def start_download(folder_path, output_folder, progress_var, progress_bar, cancel_flag):
+def start_download(folder_path, output_folder, progress_var, progress_bar, cancel_flag, save_as_png_var, save_as_jpg_var):
     platform_id = get_selected_platform_id()
     if platform_id is None:
         messagebox.showerror("Erro", "Por favor, selecione uma plataforma válida.")
         return
     
+    
     game_names = get_game_names_from_folder(folder_path)
     progress_bar['maximum'] = len(game_names)
     progress_var.set(0)
+
+    # Convertendo os valores booleanos dos checkboxes para True/False
+    save_as_png = save_as_png_var.get() == 1
+    save_as_jpg = save_as_jpg_var.get() == 1
 
     # Chamada para iniciar o download das capas
     for game_name, original_file_name in game_names:
         if cancel_flag[0]:
             break
-        download_game_cover(game_name, platform_id, output_folder, progress_var, original_file_name)
+
+        download_game_cover(game_name, platform_id, output_folder, progress_var, original_file_name, save_as_png, save_as_jpg)
         progress_bar.update()
 
     messagebox.showinfo("Download", "Download concluído!" if not cancel_flag[0] else "Download cancelado!")
@@ -237,7 +248,7 @@ root.geometry("500x790")
 root.configure(background='light blue')
 
 # Definindo ícone
-icon_path = 'C:/Users/XXX/XXX/Imagens/img.ico'
+icon_path = 'C:/Users/USER/OneDrive/Imagens/teste.ico'
 if os.path.exists(icon_path):
     root.iconbitmap(icon_path)
 
@@ -245,15 +256,22 @@ input_folder_var = tk.StringVar()
 output_folder_var = tk.StringVar()
 platform_var = tk.StringVar()
 progress_var = tk.IntVar()
+save_as_png_var = tk.IntVar()
+save_as_jpg_var = tk.IntVar()
 cancel_flag = [False]
 
-# Pasta dos Jogos.
+
+
+# Pasta para guardar as img.
 label = tk.Label(root, text="Pasta dos Jogos:", background='light blue', font=('Arial', 12, 'bold'))
 label.pack(pady=5)
 entry = tk.Entry(root, textvariable=input_folder_var, width=50, font=('Arial', 10))
 entry.pack(pady=5)
 button = tk.Button(root, text="Selecionar Pasta", command=select_input_folder, font=('Arial', 10, 'bold'))
 button.pack(pady=5)
+
+
+
 
 # Pasta para guardar as img.
 label1 = tk.Label(root, text="Pasta das Imagens", background='light blue', font=('Arial', 12, 'bold'))
@@ -263,7 +281,11 @@ entry.pack(pady=5)
 button = tk.Button(root, text="Selecionar Pasta", command=select_output_folder, font=('Arial', 10, 'bold'))
 button.pack(pady=5)
 
-# Selecionar a plataforma
+
+
+
+
+# Combobox para selecionar a plataforma
 tk.Label(root, text="Selecione a Plataforma:", background='light blue',font=('Arial', 12, 'bold')).pack(pady=5)
 platform_combo = ttk.Combobox(root, textvariable=platform_var, values=[platform[1] for platform in plataformas], width=47)
 platform_combo.pack(pady=5)
@@ -273,22 +295,29 @@ progress_bar = Progressbar(root, length=300, variable=progress_var)
 progress_bar.pack(pady=5)
 
 # Botões para iniciar e cancelar o download
-tk.Button(root, text="Iniciar Download",font=('Arial', 12, 'bold'), command=lambda: Thread(target=start_download, args=(input_folder_var.get(), output_folder_var.get(), progress_var, progress_bar, cancel_flag)).start()).pack(pady=5)
+tk.Button(root, text="Iniciar Download",font=('Arial', 12, 'bold'), command=lambda: Thread(target=start_download, args=(input_folder_var.get(), output_folder_var.get(), progress_var, progress_bar, cancel_flag,save_as_png_var, save_as_jpg_var)).start()).pack(pady=5)
 tk.Button(root, text="Cancelar Download", font=('Arial', 12, 'bold'),command=cancel_download).pack(pady=5)
-
 
 # Verificação de atualizações
 check_for_updates()
 
 
-# Imagem do criador do programa
-image_path = 'C:/Users/XXX/XXX/Imagens/img.png'
+
+ttk.Checkbutton(root, text="Salvar como PNG", variable=save_as_png_var).pack(padx=5, pady=5, anchor=tk.CENTER)
+ttk.Checkbutton(root, text="Salvar como JPG", variable=save_as_jpg_var).pack(padx=5, pady=5, anchor=tk.CENTER)
+
+
+# Imagem do programa
+image_path = 'C:/Users/USER/OneDrive/Imagens/test.png'  # Substitua pelo caminho correto da sua imagem
 if os.path.exists(image_path):
     image = tk.PhotoImage(file=image_path)
+    image = image.subsample(2, 2)
     image_label = tk.Label(root, image=image, background='light blue')
     image_label.pack(pady=10)
+    
 
-# Informações do programa
+
+# informações do programa
 label_text = "Programa criado por: @Phoenixx1202"
 bold_font = ('Arial', 12, 'bold')
 label = tk.Label(root, text=label_text, background='light blue', font=bold_font)
